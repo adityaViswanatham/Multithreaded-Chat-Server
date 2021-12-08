@@ -86,9 +86,9 @@ public class ServerWorker extends Thread {
 				this.channels.remove(channel);
 				String msg = "Successfully left " + channel + "\n";
 				send(msg);
-				
+
 				// notify other people in the channel
-				for (ServerWorker worker: workerList) {
+				for (ServerWorker worker : workerList) {
 					if (!this.userName.equals(worker.getUserName()) && worker.isChannelMember(channel)) {
 						String broadcastMsg = this.userName + " has left " + channel + "\n";
 						worker.send(broadcastMsg);
@@ -112,9 +112,9 @@ public class ServerWorker extends Thread {
 				this.channels.add(channel);
 				String msg = "Successfully joined " + channel + "\n";
 				send(msg);
-				
+
 				// notify other people in the channel
-				for (ServerWorker worker: workerList) {
+				for (ServerWorker worker : workerList) {
 					if (!this.userName.equals(worker.getUserName()) && worker.isChannelMember(channel)) {
 						String broadcastMsg = this.userName + " has joined " + channel + "\n";
 						worker.send(broadcastMsg);

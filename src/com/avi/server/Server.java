@@ -38,7 +38,6 @@ public class Server extends Thread {
 				workerList.add(worker);
 				worker.start();
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

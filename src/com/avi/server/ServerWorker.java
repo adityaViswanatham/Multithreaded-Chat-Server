@@ -33,7 +33,6 @@ public class ServerWorker extends Thread {
 	public void run() {
 		try {
 			handleClientSocket();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {

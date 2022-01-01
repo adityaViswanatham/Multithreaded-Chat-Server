@@ -18,21 +18,28 @@ public class ChatClient {
 		this.serverPort = serverPort;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		ChatClient client = new ChatClient("localhost", 8181);
 		if (!client.connect())
 			System.err.println("Connection Error...");
-		else
+		else {
 			System.out.println("Connection Successful...");
+			client.login("admin", "admin");
+		}
+	}
+
+	private void login(String userName, String password) throws IOException {
+		String cmd = "login " + userName + " " + password + "\n";
+		this.serverOut.write(cmd.getBytes());
 	}
 
 	private boolean connect() {
 		try {
 			this.socket = new Socket(this.serverName, this.serverPort);
+			System.out.println("Client port is: " + this.socket.getLocalPort());
 			this.serverOut = this.socket.getOutputStream();
 			this.serverIn = this.socket.getInputStream();
 			return true;
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

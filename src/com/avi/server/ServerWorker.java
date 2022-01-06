@@ -97,10 +97,6 @@ public class ServerWorker extends Thread {
 		}
 	}
 
-	public boolean isChannelMember(String topic) {
-		return this.channels.contains(topic);
-	}
-
 	// command format: "join #topic1 ..."
 	private void handleJoin(String[] tokens) throws IOException {
 		List<ServerWorker> workerList = server.getWorkerList();
@@ -171,10 +167,6 @@ public class ServerWorker extends Thread {
 		this.clientSocket.close();
 	}
 
-	public String getUserName() {
-		return this.userName;
-	}
-
 	private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
 		if (tokens.length == 3) {
 			String userName = tokens[1];
@@ -208,14 +200,26 @@ public class ServerWorker extends Thread {
 				}
 
 			} else {
+				System.err.println("Login failed for: " + userName);
 				String msg = "Login Error\n";
 				outputStream.write(msg.getBytes());
 			}
 		}
 	}
 
+	/**
+	 * Helper methods for handlers
+	 */
+	public String getUserName() {
+		return this.userName;
+	}
+
 	private void send(String msg) throws IOException {
 		if (this.userName != null)
 			this.outputStream.write(msg.getBytes());
+	}
+
+	public boolean isChannelMember(String topic) {
+		return this.channels.contains(topic);
 	}
 }

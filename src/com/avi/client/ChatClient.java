@@ -1,7 +1,9 @@
 package com.avi.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -12,6 +14,7 @@ public class ChatClient {
 	private Socket socket;
 	private OutputStream serverOut;
 	private InputStream serverIn;
+	private BufferedReader bufferedIn;
 
 	public ChatClient(String serverName, int serverPort) {
 		this.serverName = serverName;
@@ -24,13 +27,19 @@ public class ChatClient {
 			System.err.println("Connection Error...");
 		else {
 			System.out.println("Connection Successful...");
-			client.login("admin", "admin");
+			boolean resp = client.login("admin", "admin");
+			if (resp)
+				System.out.println("Login successful");
+			else
+				System.out.println("Login Failed");
 		}
 	}
 
-	private void login(String userName, String password) throws IOException {
+	private boolean login(String userName, String password) throws IOException {
 		String cmd = "login " + userName + " " + password + "\n";
 		this.serverOut.write(cmd.getBytes());
+		String response = this.bufferedIn.readLine();
+		return response.equalsIgnoreCase("login error") ? false : true;
 	}
 
 	private boolean connect() {
@@ -39,8 +48,10 @@ public class ChatClient {
 			System.out.println("Client port is: " + this.socket.getLocalPort());
 			this.serverOut = this.socket.getOutputStream();
 			this.serverIn = this.socket.getInputStream();
+			this.bufferedIn = new BufferedReader(new InputStreamReader(this.serverIn));
 			return true;
 		} catch (IOException e) {
+			System.err.println("Inside the connect catch block");
 			e.printStackTrace();
 		}
 		return false;

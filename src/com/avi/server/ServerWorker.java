@@ -159,7 +159,7 @@ public class ServerWorker extends Thread {
 		System.out.println(userName + " has logged out");
 
 		// notify all users about current user logout
-		String broadcastMsg = userName + " has logged out\n";
+		String broadcastMsg = "offline " + userName + "\n";
 		for (ServerWorker worker : workerList) {
 			if (!worker.getUserName().equals(this.userName))
 				worker.send(broadcastMsg);
@@ -186,19 +186,18 @@ public class ServerWorker extends Thread {
 					if (worker.getUserName() != null) {
 						// not sending self's online presence to self
 						if (!this.userName.equals(worker.getUserName())) {
-							String onlineMsg = worker.getUserName() + " is online!!!\n";
+							String onlineMsg = "online " + worker.getUserName() + "\n";
 							send(onlineMsg);
 						}
 					}
 				}
 
 				// send all users current online login
-				String broadcastMsg = userName + " is online!!!\n";
+				String broadcastMsg = "online " + userName + "\n";
 				for (ServerWorker worker : workerList) {
 					if (!this.userName.equals(worker.getUserName()))
 						worker.send(broadcastMsg);
 				}
-
 			} else {
 				System.err.println("Login failed for: " + userName);
 				String msg = "Login Error\n";
